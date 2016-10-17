@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,76 +23,67 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<Movie> movieArrayList = new ArrayList<Movie>();
-    private MainActivityFragment mainFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            mainFragment = new MainActivityFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_main, mainFragment, "MainFragment")
+                    .add(R.id.activity_main, new MainActivityFragment(), "MainFragment")
                     .commit();
-        } else {
-            mainFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentByTag("MainFragment");
         }
-        if (savedInstanceState != null &&  savedInstanceState.containsKey("com.app.movieslist") == true) {
-            ArrayList<Movie> savedMoviesList = savedInstanceState.getParcelableArrayList("com.app.movieslist");
-            this.moviesList(savedMoviesList);
-        } else {
-            new GetMoviesTask(MoviesOrder.POPULAR, this).execute();
-        }
-        // Test Code
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_top_rated) {
-            new GetMoviesTask(MoviesOrder.TOP_RATED, this).execute();
-            return true;
-        } else if (id == R.id.action_popular) {
-            new GetMoviesTask(MoviesOrder.POPULAR, this).execute();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void moviesList(ArrayList<Movie> moviesArrayList) {
-        this.movieArrayList = moviesArrayList;
-        if (mainFragment.mMovieAdapter != null ) {
-            mainFragment.mMovieAdapter.setMoviesArrayList(this.movieArrayList);
-            mainFragment.mMovieAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("com.app.movieslist", this.movieArrayList);
-        super.onSaveInstanceState(outState);
     }
 
     // Fragment for the main grid view.
     public static class MainActivityFragment extends Fragment {
+        ArrayList<Movie> movieArrayList = new ArrayList<Movie>();
         private MovieAdapter mMovieAdapter;
+        private int selectedMenuItemId;
         public MainActivityFragment() {
         }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+            mMovieAdapter = new MovieAdapter(getContext(), this.movieArrayList);
+            if (savedInstanceState != null &&  savedInstanceState.containsKey("com.app.movieslist") == true) {
+                ArrayList<Movie> savedMoviesList = savedInstanceState.getParcelableArrayList("com.app.movieslist");
+                this.moviesList(savedMoviesList);
+                selectedMenuItemId = savedInstanceState.getInt("com.app.menuitem");
+            } else {
+                selectedMenuItemId = R.id.action_popular;
+                new GetMoviesTask(MoviesOrder.POPULAR, this).execute();
+            }
+        }
 
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            inflater.inflate(R.menu.main_activity_menu, menu);
+        }
+
+        @Override
+        public void onPrepareOptionsMenu(Menu menu) {
+            MenuItem menuItem = menu.findItem(selectedMenuItemId);
+            menuItem.setChecked(true);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            selectedMenuItemId = item.getItemId();
+            int id = item.getItemId();
+            item.setChecked(true);
+            if (id == R.id.action_top_rated) {
+                new GetMoviesTask(MoviesOrder.TOP_RATED, this).execute();
+                return true;
+            } else if (id == R.id.action_popular) {
+                new GetMoviesTask(MoviesOrder.POPULAR, this).execute();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
 
         @Nullable
@@ -114,9 +106,20 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mMovieAdapter = new MovieAdapter(getContext(), mainActivity.movieArrayList);
             view.setAdapter(mMovieAdapter);
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            outState.putParcelableArrayList("com.app.movieslist", this.movieArrayList);
+            outState.putInt("com.app.menuitem", this.selectedMenuItemId);
+            super.onSaveInstanceState(outState);
+        }
+
+        public void moviesList(ArrayList<Movie> moviesArrayList) {
+            this.movieArrayList = moviesArrayList;
+            this.mMovieAdapter.setMoviesArrayList(this.movieArrayList);
+            this.mMovieAdapter.notifyDataSetChanged();
         }
     }
 }

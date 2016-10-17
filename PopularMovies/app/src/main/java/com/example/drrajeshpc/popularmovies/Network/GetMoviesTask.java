@@ -25,12 +25,12 @@ import java.util.ArrayList;
  */
 
 public class GetMoviesTask extends AsyncTask<String, Void, String> {
-    WeakReference<MainActivity> weakDelegate;
+    WeakReference<MainActivity.MainActivityFragment> weakDelegate;
     private final String LOG_TAG = GetMoviesTask.class.getSimpleName();
     private MoviesOrder movieOrder = MoviesOrder.TOP_RATED;
-    public GetMoviesTask(MoviesOrder moviesOrder, MainActivity activity) {
+    public GetMoviesTask(MoviesOrder moviesOrder, MainActivity.MainActivityFragment activity) {
         this.movieOrder = moviesOrder;
-        weakDelegate = new WeakReference<MainActivity>(activity);
+        weakDelegate = new WeakReference<MainActivity.MainActivityFragment>(activity);
     }
 
     public void setMovieOrder(MoviesOrder newMovieOrder) {
@@ -117,8 +117,8 @@ public class GetMoviesTask extends AsyncTask<String, Void, String> {
                     }
                 }
                 // TODO: Use Interface and make this AsyncTask generic.
-                MainActivity activity = weakDelegate.get();
-                activity.moviesList(movieArrayList);
+                MainActivity.MainActivityFragment activityFragment = weakDelegate.get();
+                activityFragment.moviesList(movieArrayList);
                 Log.d(LOG_TAG, movieArrayList.toString());
             } catch (JSONException e) {
                 Log.d(LOG_TAG, "Error parsing movie json");
