@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.drrajeshpc.popularmovies.Constants.StringConstants;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,12 +55,12 @@ public class Movie implements Parcelable{
 
     public Movie(JSONObject movieObject) {
         try {
-            mId = movieObject.getString("id");
-            mTitle = movieObject.getString("original_title");
-            mPosterPath = movieObject.getString("poster_path");
-            mOverview = movieObject.getString("overview");
-            mAverageVote = movieObject.getString("vote_average") + "/10";
-            mReleaseDate = movieObject.getString("release_date");
+            mId = movieObject.getString(StringConstants.KEY_MOVIE_ID);
+            mTitle = movieObject.getString(StringConstants.KEY_ORIGINAL_TITLE);
+            mPosterPath = movieObject.getString(StringConstants.KEY_POSTER_PATH);
+            mOverview = movieObject.getString(StringConstants.KEY_OVERVIEW);
+            mAverageVote = movieObject.getString(StringConstants.KEY_VOTE_AVERAGE) + "/10";
+            mReleaseDate = movieObject.getString(StringConstants.KEY_RELEASE_DATE);
         } catch (JSONException e) {
             Log.d(Movie.class.getSimpleName(), "Exception while creating object with id : " + mId);
         } finally {

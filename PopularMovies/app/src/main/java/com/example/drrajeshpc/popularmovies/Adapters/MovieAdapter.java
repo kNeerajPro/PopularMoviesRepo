@@ -35,7 +35,6 @@ public class MovieAdapter extends BaseAdapter {
         return mMovieArrayList.get(i);
     }
 
-    // TODO: What to return from here.
     @Override
     public long getItemId(int i) {
         return 0;
@@ -49,7 +48,6 @@ public class MovieAdapter extends BaseAdapter {
             //imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
             imageView.setLayoutParams(new GridView.MarginLayoutParams(GridView.MarginLayoutParams.WRAP_CONTENT, GridView.MarginLayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            //imageView.setPadding(8,8,8,8);
         } else {
             imageView = (ImageView)view;
         }

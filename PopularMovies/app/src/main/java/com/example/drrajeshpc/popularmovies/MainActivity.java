@@ -16,11 +16,14 @@ import android.widget.GridView;
 
 import com.example.drrajeshpc.popularmovies.Adapters.MovieAdapter;
 import com.example.drrajeshpc.popularmovies.Constants.MoviesOrder;
+import com.example.drrajeshpc.popularmovies.Interfaces.GetMoviesTaskHandler;
 import com.example.drrajeshpc.popularmovies.Models.Movie;
 import com.example.drrajeshpc.popularmovies.Network.GetMoviesTask;
 
 import java.util.ArrayList;
 
+import static com.example.drrajeshpc.popularmovies.Constants.StringConstants.KEY_INSTANCE_STATE_BUNDLE_MOVIES_LIST;
+import static com.example.drrajeshpc.popularmovies.Constants.StringConstants.KEY_INSTANCE_STATE_BUNDLE_SELCTED_MENUITEM_ID;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -29,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_main, new MainActivityFragment(), "MainFragment")
+                    .add(R.id.activity_main, new MainActivityFragment())
                     .commit();
         }
     }
 
     // Fragment for the main grid view.
-    public static class MainActivityFragment extends Fragment {
+    public static class MainActivityFragment extends Fragment implements GetMoviesTaskHandler {
         ArrayList<Movie> movieArrayList = new ArrayList<Movie>();
         private MovieAdapter mMovieAdapter;
         private int selectedMenuItemId;
@@ -47,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
             mMovieAdapter = new MovieAdapter(getContext(), this.movieArrayList);
-            if (savedInstanceState != null &&  savedInstanceState.containsKey("com.app.movieslist") == true) {
-                ArrayList<Movie> savedMoviesList = savedInstanceState.getParcelableArrayList("com.app.movieslist");
+            if (savedInstanceState != null &&  savedInstanceState.containsKey(KEY_INSTANCE_STATE_BUNDLE_MOVIES_LIST) == true) {
+                ArrayList<Movie> savedMoviesList = savedInstanceState.getParcelableArrayList(KEY_INSTANCE_STATE_BUNDLE_MOVIES_LIST);
                 this.moviesList(savedMoviesList);
-                selectedMenuItemId = savedInstanceState.getInt("com.app.menuitem");
+                selectedMenuItemId = savedInstanceState.getInt(KEY_INSTANCE_STATE_BUNDLE_SELCTED_MENUITEM_ID);
             } else {
                 selectedMenuItemId = R.id.action_popular;
                 new GetMoviesTask(MoviesOrder.POPULAR, this).execute();
@@ -89,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-             // TODO: Inflate the rootview.
             View rootView = inflater.inflate(R.layout.fragment_main_activity, container, false);
             setupView(rootView);
             return rootView;
@@ -111,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSaveInstanceState(Bundle outState) {
-            outState.putParcelableArrayList("com.app.movieslist", this.movieArrayList);
-            outState.putInt("com.app.menuitem", this.selectedMenuItemId);
+            outState.putParcelableArrayList(KEY_INSTANCE_STATE_BUNDLE_MOVIES_LIST, this.movieArrayList);
+            outState.putInt(KEY_INSTANCE_STATE_BUNDLE_SELCTED_MENUITEM_ID, this.selectedMenuItemId);
             super.onSaveInstanceState(outState);
         }
 

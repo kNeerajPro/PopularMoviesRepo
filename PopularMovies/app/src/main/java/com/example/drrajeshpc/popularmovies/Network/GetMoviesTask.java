@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.drrajeshpc.popularmovies.Constants.MoviesOrder;
+import com.example.drrajeshpc.popularmovies.Interfaces.GetMoviesTaskHandler;
 import com.example.drrajeshpc.popularmovies.MainActivity;
 import com.example.drrajeshpc.popularmovies.Models.Movie;
 
@@ -25,16 +26,12 @@ import java.util.ArrayList;
  */
 
 public class GetMoviesTask extends AsyncTask<String, Void, String> {
-    WeakReference<MainActivity.MainActivityFragment> weakDelegate;
+    WeakReference<GetMoviesTaskHandler> weakDelegate;
     private final String LOG_TAG = GetMoviesTask.class.getSimpleName();
     private MoviesOrder movieOrder = MoviesOrder.TOP_RATED;
     public GetMoviesTask(MoviesOrder moviesOrder, MainActivity.MainActivityFragment activity) {
         this.movieOrder = moviesOrder;
-        weakDelegate = new WeakReference<MainActivity.MainActivityFragment>(activity);
-    }
-
-    public void setMovieOrder(MoviesOrder newMovieOrder) {
-        this.movieOrder = newMovieOrder;
+        weakDelegate = new WeakReference<GetMoviesTaskHandler>(activity);
     }
 
     @Override
@@ -54,7 +51,6 @@ public class GetMoviesTask extends AsyncTask<String, Void, String> {
             } else {
                 url = FetchUrl.getTopRatedMoviesUrl("1");
             }
-            Log.d(LOG_TAG, url.toString());
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -116,10 +112,8 @@ public class GetMoviesTask extends AsyncTask<String, Void, String> {
                         movieArrayList.add(movie);
                     }
                 }
-                // TODO: Use Interface and make this AsyncTask generic.
-                MainActivity.MainActivityFragment activityFragment = weakDelegate.get();
-                activityFragment.moviesList(movieArrayList);
-                Log.d(LOG_TAG, movieArrayList.toString());
+                GetMoviesTaskHandler moviesTaskHandler = weakDelegate.get();
+                moviesTaskHandler.moviesList(movieArrayList);
             } catch (JSONException e) {
                 Log.d(LOG_TAG, "Error parsing movie json");
             }

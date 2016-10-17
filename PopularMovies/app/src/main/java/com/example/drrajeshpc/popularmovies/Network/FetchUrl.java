@@ -21,18 +21,19 @@ public class FetchUrl {
     private static final String POPULAR_MOVIE_KEY = "popular";
     private static final String TOP_RATED_MOVIE_KEY = "top_rated";
 
+    private static final String DEBUG_LOG_CONSTANT = FetchUrl.class.getSimpleName();
+
     public static final URL getPopularMoviesUrl(String pageNumber) {
         Uri builtUri = Uri.parse(BASE_URL_MOVIEDB).buildUpon()
                 .appendPath(POPULAR_MOVIE_KEY)
                 .appendQueryParameter(StringConstants.API_KEY, BuildConfig.MOVIE_DB_API_KEY)
                 .appendQueryParameter(StringConstants.PAGE, pageNumber)
                 .build();
-        Log.d(StringConstants.DEBUG_LOG_CONSTANT, builtUri.toString());
         URL url= null;
         try {
            url = new URL(builtUri.toString());
         }catch (MalformedURLException e) {
-            Log.d(StringConstants.DEBUG_LOG_CONSTANT, "Malformed exception when building url = " + url.toString());
+            Log.d(DEBUG_LOG_CONSTANT, "Malformed exception when building url = " + url.toString());
         }
         return url;
     }
@@ -43,12 +44,11 @@ public class FetchUrl {
                 .appendQueryParameter(StringConstants.API_KEY, BuildConfig.MOVIE_DB_API_KEY)
                 .appendQueryParameter(StringConstants.PAGE, pageNumber)
                 .build();
-        Log.d(StringConstants.DEBUG_LOG_CONSTANT, builtUri.toString());
         URL url= null;
         try {
             url = new URL(builtUri.toString());
         }catch (MalformedURLException e) {
-            Log.d(StringConstants.DEBUG_LOG_CONSTANT, "Malformed exception when building url = " + url.toString());
+            Log.d(DEBUG_LOG_CONSTANT, "Malformed exception when building url = " + url.toString());
         }
         return url;
     }
@@ -58,12 +58,11 @@ public class FetchUrl {
                 .appendPath(posterSize)
                 .appendEncodedPath(posterPath)
                 .build();
-        Log.d(StringConstants.DEBUG_LOG_CONSTANT, builtUri.toString());
         URL url= null;
         try {
             url = new URL(builtUri.toString());
         }catch (MalformedURLException e) {
-            Log.d(StringConstants.DEBUG_LOG_CONSTANT, "Malformed exception when building url = " + url.toString());
+            Log.d(DEBUG_LOG_CONSTANT, "Malformed exception when building url = " + url.toString());
         }
         return url;
     }

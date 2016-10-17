@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.drrajeshpc.popularmovies.Constants.StringConstants;
 import com.example.drrajeshpc.popularmovies.Models.Movie;
 import com.example.drrajeshpc.popularmovies.Network.FetchUrl;
 import com.example.drrajeshpc.popularmovies.R;
@@ -38,7 +39,6 @@ public class MovieDetailAdapter extends BaseAdapter {
         return mMovie;
     }
 
-    // TODO: What to return from here.
     @Override
     public long getItemId(int i) {
         return 0;
@@ -71,12 +71,10 @@ public class MovieDetailAdapter extends BaseAdapter {
             movieNameTextView.setText(mMovie.getmTitle());
         } else {
             ImageView moviePosterImageView = (ImageView) view.findViewById(R.id.imageView2);
-            URL posterUrl = FetchUrl.getPosterUrl("w185", mMovie.getmPosterPath());
+            URL posterUrl = FetchUrl.getPosterUrl(StringConstants.POSTER_IMAGE_SIZE, mMovie.getmPosterPath());
             Picasso.with(mContext).load(posterUrl.toString()).into(moviePosterImageView);
             TextView dateTextView = (TextView) view.findViewById(R.id.textView2);
             dateTextView.setText(mMovie.getmReleaseDate());
-//            TextView timeTextView = (TextView) view.findViewById(R.id.textView3);
-//            timeTextView.setText(mMovie.getmReleaseDate());
             TextView avgRatingTextView = (TextView) view.findViewById(R.id.textView3);
             avgRatingTextView.setText(mMovie.getmAverageVote());
             Button favouriteButton = (Button) view.findViewById(R.id.button);

@@ -8,6 +8,8 @@ import android.widget.ListView;
 import com.example.drrajeshpc.popularmovies.Adapters.MovieDetailAdapter;
 import com.example.drrajeshpc.popularmovies.Models.Movie;
 
+import static com.example.drrajeshpc.popularmovies.Constants.StringConstants.KEY_INTENT_EXTRA_STRING_KEY_MOVIE;
+
 public class MovieDetailActivity extends AppCompatActivity {
     private Movie mMovie;
     @Override
@@ -15,7 +17,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         Bundle bundle = getIntent().getExtras();
-        mMovie = bundle.getParcelable("com.app.models.movie");
+        mMovie = bundle.getParcelable(KEY_INTENT_EXTRA_STRING_KEY_MOVIE);
         getSupportActionBar().setTitle(mMovie.getmTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         MovieDetailAdapter movieDetailAdapter = new MovieDetailAdapter(this, mMovie);
