@@ -57,7 +57,7 @@ public class Movie implements Parcelable{
             mTitle = movieObject.getString("original_title");
             mPosterPath = movieObject.getString("poster_path");
             mOverview = movieObject.getString("overview");
-            mAverageVote = movieObject.getString("vote_average");
+            mAverageVote = movieObject.getString("vote_average") + "/10";
             mReleaseDate = movieObject.getString("release_date");
         } catch (JSONException e) {
             Log.d(Movie.class.getSimpleName(), "Exception while creating object with id : " + mId);

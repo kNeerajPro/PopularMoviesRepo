@@ -75,9 +75,9 @@ public class MovieDetailAdapter extends BaseAdapter {
             Picasso.with(mContext).load(posterUrl.toString()).into(moviePosterImageView);
             TextView dateTextView = (TextView) view.findViewById(R.id.textView2);
             dateTextView.setText(mMovie.getmReleaseDate());
-            TextView timeTextView = (TextView) view.findViewById(R.id.textView3);
-            timeTextView.setText(mMovie.getmReleaseDate());
-            TextView avgRatingTextView = (TextView) view.findViewById(R.id.textView4);
+//            TextView timeTextView = (TextView) view.findViewById(R.id.textView3);
+//            timeTextView.setText(mMovie.getmReleaseDate());
+            TextView avgRatingTextView = (TextView) view.findViewById(R.id.textView3);
             avgRatingTextView.setText(mMovie.getmAverageVote());
             Button favouriteButton = (Button) view.findViewById(R.id.button);
             favouriteButton.setText(R.string.set_as_favourite);
